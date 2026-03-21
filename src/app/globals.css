@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root {
+  /* Surface hierarchy (cream/warm whites) */
+  --surface: #fff8f6;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #fff1eb;
+  --surface-container: #ffeae1;
+  --surface-container-high: #ffe2d6;
+  --surface-container-highest: #ffdbcc;
+
+  /* Primary (terracotta) */
+  --primary: #c17547;
+  --primary-dark: #8c4b20;
+  --primary-container: #aa6236;
+  --on-primary: #ffffff;
+
+  /* Secondary (sage green) */
+  --secondary: #7a8b6f;
+  --secondary-dark: #536349;
+  --secondary-container: #d3e5c5;
+  --on-secondary-container: #2d3b24;
+
+  /* Tertiary (warm gold) */
+  --tertiary: #d4a853;
+  --tertiary-fixed: #ffdea6;
+
+  /* Text & outlines */
+  --on-surface: #2d1509;
+  --on-surface-variant: #53433b;
+  --outline-variant: #d8c2b6;
+
+  /* Semantic */
+  --background: var(--surface);
+  --foreground: var(--on-surface);
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-high: var(--surface-container-high);
+  --color-surface-highest: var(--surface-container-highest);
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-on-primary: var(--on-primary);
+  --color-secondary: var(--secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-fixed: var(--tertiary-fixed);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-outline-variant: var(--outline-variant);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-serif: var(--font-noto-serif);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+}
+
+/* Linen paper texture - subtle SVG noise at 2% opacity */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
