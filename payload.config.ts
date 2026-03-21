@@ -12,6 +12,10 @@ import { Tags } from '@/collections/Tags'
 import { Recipes } from '@/collections/Recipes'
 import { BlogPosts } from '@/collections/BlogPosts'
 
+import { SiteSettings } from '@/globals/SiteSettings'
+import { Header } from '@/globals/Header'
+import { Footer } from '@/globals/Footer'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -23,6 +27,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Categories, Tags, Recipes, BlogPosts],
+  globals: [SiteSettings, Header, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'CHANGE-ME-IN-PRODUCTION',
   typescript: {

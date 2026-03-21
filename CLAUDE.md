@@ -20,6 +20,19 @@ Memory files live in `docs/memory/<task-name>-<YYYY-MM-DD>.md`. The architecture
 - Implementation plan: `docs/PLAN.md`
 - Design system: `docs/DESIGN.md`
 
+## Stitch Design Reference
+
+A Google Stitch project contains the UI wireframes and design screens for this app. Use the MCP Stitch tools to fetch screen details when implementing frontend pages.
+
+- **Project ID:** `336120925572423247`
+- **Screens:** Homepage, Recipe Listing, Individual Recipe, Blog Listing, Blog Post, Search Results
+
+When building any frontend page:
+1. Use `mcp__stitch__get_screen` to fetch the HTML/screenshot for the corresponding screen
+2. Match layout, spacing, typography, and component structure from the Stitch screen
+3. Use `docs/DESIGN.md` for color tokens, typography rules, and component specs
+4. Both sources are authoritative — Stitch for layout/structure, DESIGN.md for tokens/rules
+
 ## UI/UX Verification
 
 After implementing any UI/UX changes, use `agent-browser` to verify the result:

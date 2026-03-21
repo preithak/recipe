@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Noto_Serif, Inter } from 'next/font/google'
 import '../globals.css'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
 
 const notoSerif = Noto_Serif({
   variable: '--font-noto-serif',
@@ -31,9 +33,9 @@ export default function FrontendLayout({
   return (
     <html lang="en" className={`${notoSerif.variable} ${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-surface text-on-surface">
-        {/* Header/nav will be added in Phase 3 */}
+        <Header />
         <main className="flex-1">{children}</main>
-        {/* Footer will be added in Phase 3 */}
+        <Footer />
       </body>
     </html>
   )

@@ -122,13 +122,27 @@ reciepie/
 
 ---
 
-## Design Direction: Warm & Cozy
+## Design Direction: "The Heirloom Editorial" (Warm & Cozy)
 
-- **Color palette**: Cream/off-white backgrounds, warm browns, terracotta/rust accents, sage green highlights
-- **Typography**: Serif font for headings (e.g., Playfair Display or Lora), clean sans-serif for body (e.g., Inter or Source Sans)
-- **Visual touches**: Subtle paper/linen texture backgrounds, rounded corners, warm shadows, photography-forward layouts
-- **Cards**: Soft shadows, slightly rounded, warm border tones
+- **Color palette**: Cream (#FFF8F6), terracotta primary (#C17547), sage green secondary (#7A8B6F), warm gold tertiary (#D4A853), warm brown text (#2D1509)
+- **Typography**: Noto Serif for headings, Inter for body
+- **Visual touches**: Subtle linen paper texture (2% opacity SVG noise), no hard borders (use background color shifts), glassmorphic nav, organic rounded shapes, ambient soft shadows
+- **Cards**: No borders, surface-container-low background, image aspect 4:5, title overlapping image
 - **Icons**: Hand-drawn or organic style where appropriate
+- **Full design system**: `docs/DESIGN.md`
+
+### Stitch Design Screens
+
+A Google Stitch project (ID: `336120925572423247`) contains wireframes for all pages. Use the MCP Stitch tools (`mcp__stitch__get_screen`, `mcp__stitch__list_screens`) to fetch screen HTML and screenshots when implementing each page. Available screens:
+
+| Screen | Use for Phase |
+|--------|--------------|
+| Homepage | Phase 6 |
+| Recipe Listing | Phase 4 |
+| Individual Recipe | Phase 4 |
+| Blog Listing | Phase 5 |
+| Blog Post | Phase 5 |
+| Search Results | Phase 6 |
 
 ---
 
