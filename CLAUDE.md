@@ -19,3 +19,13 @@ Memory files live in `docs/memory/<task-name>-<YYYY-MM-DD>.md`. The architecture
 - Architecture: `docs/ARCHITECTURE_REFERENCE.md`
 - Implementation plan: `docs/PLAN.md`
 - Design system: `docs/DESIGN.md`
+
+## UI/UX Verification
+
+After implementing any UI/UX changes, use `agent-browser` to verify the result:
+
+1. Start the dev server (`pnpm dev`)
+2. Open the relevant page with `agent-browser open http://localhost:3000/<path>`
+3. Take a screenshot to verify visual output: `agent-browser screenshot`
+4. Use `agent-browser snapshot -i` to verify interactive elements are present and accessible
+5. Compare against the design system in `docs/DESIGN.md` and Stitch screens (project ID: `336120925572423247`)
