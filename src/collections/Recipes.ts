@@ -40,7 +40,6 @@ export const Recipes: CollectionConfig = {
       name: 'featuredImage',
       type: 'upload',
       relationTo: 'media',
-      required: true,
     },
     // --- Metadata ---
     {
