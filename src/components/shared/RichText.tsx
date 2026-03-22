@@ -23,8 +23,13 @@ function renderNode(node: SerializedLexicalNode, index: number): React.ReactNode
 
     case 'heading': {
       const tag = (node as { tag?: string }).tag || 'h2'
-      const Component = tag as keyof JSX.IntrinsicElements
-      return <Component key={index} className="font-serif text-on-surface mb-3 mt-6">{children}</Component>
+      const headingClass = "font-serif text-on-surface mb-3 mt-6"
+      if (tag === 'h1') return <h1 key={index} className={headingClass}>{children}</h1>
+      if (tag === 'h3') return <h3 key={index} className={headingClass}>{children}</h3>
+      if (tag === 'h4') return <h4 key={index} className={headingClass}>{children}</h4>
+      if (tag === 'h5') return <h5 key={index} className={headingClass}>{children}</h5>
+      if (tag === 'h6') return <h6 key={index} className={headingClass}>{children}</h6>
+      return <h2 key={index} className={headingClass}>{children}</h2>
     }
 
     case 'text': {

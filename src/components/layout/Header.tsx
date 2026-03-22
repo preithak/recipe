@@ -30,7 +30,7 @@ export async function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          {navItems.map((item, i) => (
+          {navItems.map((item: { label: string; url: string }, i: number) => (
             <Link
               key={i}
               href={item.url}

@@ -120,7 +120,7 @@ export default async function RecipePage({ params }: Props) {
         {/* Ingredients */}
         <aside>
           <h2 className="font-serif text-2xl text-on-surface mb-4">Ingredients</h2>
-          {recipe.ingredientGroups?.map((group, gi) => (
+          {recipe.ingredientGroups?.map((group: IngredientGroup, gi: number) => (
             <div key={gi} className="mb-6">
               {group.groupName && (
                 <h3 className="text-sm font-medium text-primary uppercase tracking-wide mb-2">
@@ -128,7 +128,7 @@ export default async function RecipePage({ params }: Props) {
                 </h3>
               )}
               <ul className="space-y-2">
-                {group.ingredients?.map((ing, ii) => (
+                {group.ingredients?.map((ing: Ingredient, ii: number) => (
                   <li
                     key={ii}
                     className="flex items-baseline gap-2 text-on-surface-variant py-1.5 border-b border-outline-variant/10"
@@ -192,7 +192,7 @@ export default async function RecipePage({ params }: Props) {
         <section>
           <h2 className="font-serif text-2xl text-on-surface mb-6">Instructions</h2>
           <ol className="space-y-8">
-            {recipe.steps?.map((step, si) => {
+            {recipe.steps?.map((step: RecipeStep, si: number) => {
               const stepImage = step.image as {
                 url?: string
                 alt?: string
@@ -266,13 +266,13 @@ export default async function RecipePage({ params }: Props) {
               (recipe.category as { name?: string } | null)?.name || undefined,
             recipeCuisine: recipe.metadata?.cuisine || undefined,
             recipeIngredient: recipe.ingredientGroups?.flatMap(
-              (g) =>
+              (g: IngredientGroup) =>
                 g.ingredients?.map(
-                  (ing) =>
+                  (ing: Ingredient) =>
                     `${ing.quantity || ''} ${ing.unit || ''} ${ing.item}${ing.notes ? ` (${ing.notes})` : ''}`.trim(),
                 ) || [],
             ),
-            recipeInstructions: recipe.steps?.map((step, i) => ({
+            recipeInstructions: recipe.steps?.map((step: RecipeStep, i: number) => ({
               '@type': 'HowToStep',
               position: i + 1,
               text:
@@ -305,4 +305,22 @@ export default async function RecipePage({ params }: Props) {
       />
     </article>
   )
+}
+
+type Ingredient = {
+  quantity?: string | null
+  unit?: string | null
+  item: string
+  notes?: string | null
+}
+
+type IngredientGroup = {
+  groupName?: string | null
+  ingredients?: Ingredient[] | null
+}
+
+type RecipeStep = {
+  instruction: unknown
+  image?: unknown
+  tip?: string | null
 }

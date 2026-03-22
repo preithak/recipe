@@ -31,7 +31,7 @@ export async function Footer() {
 
           {/* Links */}
           <nav className="flex flex-wrap gap-x-10 gap-y-3">
-            {links.map((link, i) => (
+            {links.map((link: { label: string; url: string }, i: number) => (
               <Link
                 key={i}
                 href={link.url}

@@ -9,7 +9,7 @@ export async function getRecipes(options?: {
   const payload = await getPayload()
   const { limit = 12, page = 1, category, status = 'published' } = options || {}
 
-  const where: Record<string, unknown> = {}
+  const where: Record<string, { equals: string }> = {}
   if (status) where._status = { equals: status }
   if (category) where.category = { equals: category }
 
@@ -40,7 +40,7 @@ export async function getBlogPosts(options?: {
   const payload = await getPayload()
   const { limit = 12, page = 1, status = 'published' } = options || {}
 
-  const where: Record<string, unknown> = {}
+  const where: Record<string, { equals: string }> = {}
   if (status) where._status = { equals: status }
 
   return payload.find({
