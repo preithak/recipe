@@ -3,6 +3,7 @@ import { getPayload } from '@/lib/payload'
 import { getCategories } from '@/lib/queries'
 import { RecipeCard } from '@/components/recipes/RecipeCard'
 import { RecipeFilters } from '@/components/recipes/RecipeFilters'
+import { Pagination } from '@/components/ui/Pagination'
 
 export const metadata: Metadata = {
   title: 'Recipes',
@@ -10,11 +11,12 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-  searchParams: Promise<{ category?: string; difficulty?: string; time?: string }>
+  searchParams: Promise<{ category?: string; difficulty?: string; time?: string; page?: string }>
 }
 
 export default async function RecipesPage({ searchParams }: Props) {
-  const { category = '', difficulty = '', time = '' } = await searchParams
+  const { category = '', difficulty = '', time = '', page: pageParam = '1' } = await searchParams
+  const currentPage = Math.max(1, parseInt(pageParam, 10) || 1)
   const payload = await getPayload()
   const { docs: categories } = await getCategories()
 
@@ -37,7 +39,8 @@ export default async function RecipesPage({ searchParams }: Props) {
 
   const result = await payload.find({
     collection: 'recipes',
-    limit: 24,
+    limit: 12,
+    page: currentPage,
     where: { and: conditions },
     sort: '-publishedAt',
   })
@@ -83,19 +86,29 @@ export default async function RecipesPage({ searchParams }: Props) {
 
       {/* Recipe grid */}
       {recipes.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {recipes.map((recipe) => (
-            <RecipeCard
-              key={recipe.id}
-              title={recipe.title}
-              slug={recipe.slug}
-              description={recipe.description}
-              featuredImage={recipe.featuredImage as RecipeCardImage}
-              metadata={recipe.metadata}
-              category={recipe.category as { name: string } | null}
-            />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {recipes.map((recipe) => (
+              <RecipeCard
+                key={recipe.id}
+                title={recipe.title}
+                slug={recipe.slug}
+                description={recipe.description}
+                featuredImage={recipe.featuredImage as RecipeCardImage}
+                metadata={recipe.metadata}
+                category={recipe.category as { name: string } | null}
+              />
+            ))}
+          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={result.totalPages}
+            basePath="/recipes"
+            searchParams={Object.fromEntries(
+              Object.entries({ category, difficulty, time }).filter(([, v]) => v),
+            )}
+          />
+        </>
       ) : (
         <div className="text-center py-20 bg-surface-low rounded-2xl">
           <p className="font-serif text-2xl text-on-surface mb-2">No recipes found</p>

@@ -1,10 +1,14 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateBlogPost } from '@/hooks/revalidate'
 
 export const BlogPosts: CollectionConfig = {
   slug: 'blog-posts',
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'status', 'publishedAt'],
+  },
+  hooks: {
+    afterChange: [revalidateBlogPost],
   },
   access: {
     read: () => true,

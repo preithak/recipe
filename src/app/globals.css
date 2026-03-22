@@ -63,6 +63,28 @@ body {
   font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
 }
 
+/* Focus ring - warm tinted, visible on all backgrounds */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Smooth scroll for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Linen paper texture - subtle SVG noise at 2% opacity */
 body::before {
   content: '';

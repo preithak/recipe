@@ -3,6 +3,7 @@ import {
   type SerializedLexicalNode,
 } from '@payloadcms/richtext-lexical/lexical'
 import React from 'react'
+import Image from 'next/image'
 
 type Props = {
   content: SerializedEditorState | unknown
@@ -76,6 +77,73 @@ function renderNode(node: SerializedLexicalNode, index: number): React.ReactNode
 
     case 'linebreak':
       return <br key={index} />
+
+    case 'block': {
+      const blockNode = node as {
+        fields?: {
+          blockType?: string
+          style?: string
+          title?: string
+          content?: unknown
+          images?: Array<{
+            image?: { url?: string; alt?: string; sizes?: { card?: { url?: string } } }
+            caption?: string
+          }>
+          layout?: string
+        }
+      }
+      const fields = blockNode.fields
+      if (!fields) return null
+
+      if (fields.blockType === 'tipCallout') {
+        const styleMap: Record<string, { bg: string; border: string; icon: string }> = {
+          tip: { bg: 'bg-tertiary-fixed/20', border: 'border-tertiary', icon: '💡' },
+          note: { bg: 'bg-secondary-container/30', border: 'border-secondary', icon: '📝' },
+          warning: { bg: 'bg-red-50', border: 'border-red-400', icon: '⚠️' },
+        }
+        const style = styleMap[fields.style || 'tip'] || styleMap.tip
+        return (
+          <div key={index} className={`${style.bg} border-l-4 ${style.border} rounded-r-xl p-5 mb-6`}>
+            <p className="font-medium text-on-surface mb-2">
+              {style.icon} {fields.title || (fields.style === 'warning' ? 'Warning' : fields.style === 'note' ? 'Note' : "Chef's Tip")}
+            </p>
+            {fields.content ? <RichText content={fields.content as SerializedEditorState | unknown} /> : null}
+          </div>
+        )
+      }
+
+      if (fields.blockType === 'imageGallery' && fields.images) {
+        return (
+          <div key={index} className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+            {fields.images.map((item, imgIdx) => {
+              const imgUrl = item.image?.sizes?.card?.url || item.image?.url
+              if (!imgUrl) return null
+              return (
+                <figure key={imgIdx}>
+                  <div className="relative aspect-square rounded-xl overflow-hidden">
+                    <Image
+                      src={imgUrl}
+                      alt={item.image?.alt || item.caption || ''}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 50vw, 33vw"
+                    />
+                  </div>
+                  {item.caption && (
+                    <figcaption className="text-xs text-on-surface-variant mt-1 text-center">{item.caption}</figcaption>
+                  )}
+                </figure>
+              )
+            })}
+          </div>
+        )
+      }
+
+      return null
+    }
+
+    case 'horizontalrule':
+      return <hr key={index} className="my-8 border-outline-variant/15" />
 
     default:
       return children ? <div key={index}>{children}</div> : null

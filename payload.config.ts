@@ -1,6 +1,9 @@
 import { buildConfig } from 'payload'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { lexicalEditor, BlocksFeature } from '@payloadcms/richtext-lexical'
+
+import { TipCallout } from '@/blocks/TipCallout'
+import { ImageGallery } from '@/blocks/ImageGallery'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -25,10 +28,30 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    livePreview: {
+      url: ({ data, collectionConfig }) => {
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+        if (collectionConfig?.slug === 'recipes') {
+          return `${baseUrl}/recipes/${data?.slug || ''}`
+        }
+        if (collectionConfig?.slug === 'blog-posts') {
+          return `${baseUrl}/blog/${data?.slug || ''}`
+        }
+        return baseUrl
+      },
+      collections: ['recipes', 'blog-posts'],
+    },
   },
   collections: [Users, Media, Categories, Tags, Recipes, BlogPosts],
   globals: [SiteSettings, Header, Footer],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures,
+      BlocksFeature({
+        blocks: [TipCallout, ImageGallery],
+      }),
+    ],
+  }),
   secret: process.env.PAYLOAD_SECRET || 'CHANGE-ME-IN-PRODUCTION',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),

@@ -1,10 +1,14 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateRecipe } from '@/hooks/revalidate'
 
 export const Recipes: CollectionConfig = {
   slug: 'recipes',
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'difficulty', 'status', 'updatedAt'],
+  },
+  hooks: {
+    afterChange: [revalidateRecipe],
   },
   access: {
     read: () => true,
