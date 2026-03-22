@@ -38,9 +38,9 @@ export async function GET() {
     await payload.create({
       collection: 'users',
       overrideAccess: true,
-      data: { email: 'admin@reciepie.com', password: 'admin123', name: 'Admin', role: 'admin' },
+      data: { email: 'admin@recipe.com', password: 'admin123', name: 'Admin', role: 'admin' },
     })
-    log.push('Created admin user: admin@reciepie.com / admin123')
+    log.push('Created admin user: admin@recipe.com / admin123')
   } else {
     log.push('Admin user already exists')
   }

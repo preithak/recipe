@@ -14,7 +14,7 @@ These skills MUST be used proactively. Do not wait for the user to ask.
 
 Memory files live in `docs/memory/<task-name>-<YYYY-MM-DD>.md`. The architecture reference is the single source of truth for how the system is structured.
 
-# reciepie
+# recipe
 
 - Architecture: `docs/ARCHITECTURE_REFERENCE.md`
 - Implementation plan: `docs/PLAN.md`

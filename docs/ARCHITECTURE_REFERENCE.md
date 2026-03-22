@@ -1,8 +1,8 @@
-# Reciepie - Architecture Reference
+# Recipe - Architecture Reference
 
 **Generated:** 2026-03-22
 **Last Updated:** 2026-03-22
-**Status:** Phase 1 Complete — Foundation
+**Status:** Phases 1-7 Complete — Phase 8 (Deployment) pending
 
 ---
 
@@ -33,38 +33,68 @@ Planned: Vercel Blob (image storage, Phase 8)
 ## DIRECTORY STRUCTURE
 
 ```
-reciepie/
+recipe/
 ├── docs/
 │   ├── ARCHITECTURE_REFERENCE.md  # This document
+│   ├── PLAN.md                    # 8-phase implementation plan
+│   ├── DESIGN.md                  # "The Heirloom Editorial" design system
 │   └── memory/                    # Maitri-memory task tracking
+├── scripts/
+│   ├── scrape_recipes.py          # JSON-LD recipe scraper + Payload seeder
+│   └── fix_images.py              # Image download/upload helper
 ├── src/
 │   ├── app/
 │   │   ├── (frontend)/            # Public-facing pages
-│   │   │   ├── layout.tsx         # Frontend layout (header/footer TBD)
-│   │   │   └── page.tsx           # Homepage
+│   │   │   ├── layout.tsx         # Frontend layout (skip-nav, Header, Footer)
+│   │   │   ├── page.tsx           # Homepage (hero, categories, recipes, blog, newsletter)
+│   │   │   ├── recipes/
+│   │   │   │   ├── page.tsx       # Recipe listing with filters + pagination
+│   │   │   │   └── [slug]/page.tsx # Individual recipe + JSON-LD
+│   │   │   ├── blog/
+│   │   │   │   ├── page.tsx       # Blog listing with pagination
+│   │   │   │   └── [slug]/page.tsx # Individual blog post
+│   │   │   ├── categories/
+│   │   │   │   ├── page.tsx       # Category listing
+│   │   │   │   └── [slug]/page.tsx # Category with filtered recipes
+│   │   │   ├── search/page.tsx    # Search across recipes + blog
+│   │   │   └── api/seed/route.ts  # Dev seed endpoint
 │   │   ├── (payload)/             # Payload CMS admin panel & API
 │   │   │   ├── admin/
-│   │   │   │   ├── [[...segments]]/page.tsx  # Admin catch-all
+│   │   │   │   ├── [[...segments]]/page.tsx
 │   │   │   │   └── importMap.js
-│   │   │   ├── api/[...slug]/route.ts        # REST API catch-all
-│   │   │   └── layout.tsx                     # Payload root layout
-│   │   ├── layout.tsx             # Root layout (fonts, global styles)
-│   │   └── globals.css            # Tailwind + design system CSS vars
-│   ├── collections/               # Payload collection schemas
-│   │   ├── Users.ts               # Auth-enabled, admin/editor roles
-│   │   ├── Media.ts               # Image uploads with auto-resize
+│   │   │   ├── api/[...slug]/route.ts
+│   │   │   └── layout.tsx
+│   │   ├── layout.tsx             # Root layout (passthrough)
+│   │   └── globals.css            # Tailwind + design tokens + a11y
+│   ├── blocks/                    # Custom Lexical rich text blocks
+│   │   ├── TipCallout.ts          # Tip/note/warning callout
+│   │   └── ImageGallery.ts        # Captioned image grid
+│   ├── collections/
+│   │   ├── Users.ts               # Auth + admin/editor roles
+│   │   ├── Media.ts               # Image uploads (3 auto-sizes)
 │   │   ├── Categories.ts
 │   │   ├── Tags.ts
-│   │   ├── Recipes.ts             # Full recipe model (ingredients, steps, nutrition)
-│   │   └── BlogPosts.ts           # Blog with rich text, related recipes
+│   │   ├── Recipes.ts             # Full recipe model + ISR hook
+│   │   └── BlogPosts.ts           # Blog model + ISR hook
+│   ├── globals/
+│   │   ├── SiteSettings.ts        # Title, social, OG image
+│   │   ├── Header.ts              # Logo, nav items
+│   │   └── Footer.ts              # Copyright, links
+│   ├── hooks/
+│   │   └── revalidate.ts          # ISR afterChange hooks
+│   ├── components/
+│   │   ├── layout/                # Header, Footer, MobileMenuButton
+│   │   ├── recipes/               # RecipeCard, RecipeFilters
+│   │   ├── blog/                  # BlogCard
+│   │   ├── shared/                # RichText renderer
+│   │   └── ui/                    # Pagination
 │   └── lib/
-│       └── payload.ts             # getPayload() singleton helper
-├── payload.config.ts              # Payload master configuration
+│       ├── payload.ts             # getPayload() singleton
+│       └── queries.ts             # Reusable data-fetching helpers
+├── payload.config.ts              # Payload config (collections, globals, blocks, Live Preview)
 ├── next.config.ts                 # Next.js config (withPayload wrapper)
-├── tsconfig.json                  # Includes @payload-config alias
-├── CLAUDE.md                      # Project instructions
-├── PLAN.md                        # 8-phase implementation plan
-└── DESIGN.md                      # "The Heirloom Editorial" design system
+├── tsconfig.json                  # @payload-config alias
+└── CLAUDE.md                      # Project instructions + Stitch reference
 ```
 
 ---

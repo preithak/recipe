@@ -18,8 +18,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Reciepie — Warm Recipes & Kitchen Stories',
-    template: '%s | Reciepie',
+    default: 'Recipe — Warm Recipes & Kitchen Stories',
+    template: '%s | Recipe',
   },
   description:
     'A warm collection of recipes and kitchen stories, lovingly crafted for home cooks.',

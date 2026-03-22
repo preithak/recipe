@@ -10,7 +10,7 @@ export const Footer: GlobalConfig = {
     {
       name: 'copyright',
       type: 'text',
-      defaultValue: '© 2026 Reciepie. All rights reserved.',
+      defaultValue: '© 2026 Recipe. All rights reserved.',
     },
     {
       name: 'links',

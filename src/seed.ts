@@ -11,7 +11,7 @@ async function seed() {
     adminUser = await payload.create({
       collection: 'users',
       data: {
-        email: 'admin@reciepie.com',
+        email: 'admin@recipe.com',
         password: 'admin123',
         name: 'Admin',
         role: 'admin',

@@ -23,7 +23,7 @@ RECIPE_SOURCES = {
 
 
 def login():
-    resp = requests.post(f"{BASE_URL}/api/users/login", json={"email": "admin@reciepie.com", "password": "admin123"})
+    resp = requests.post(f"{BASE_URL}/api/users/login", json={"email": "admin@recipe.com", "password": "admin123"})
     return resp.json().get("token")
 
 

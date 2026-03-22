@@ -11,7 +11,7 @@ export const SiteSettings: GlobalConfig = {
       name: 'siteTitle',
       type: 'text',
       required: true,
-      defaultValue: 'Reciepie',
+      defaultValue: 'Recipe',
     },
     {
       name: 'siteDescription',

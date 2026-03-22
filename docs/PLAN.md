@@ -2,7 +2,7 @@
 
 ## Context
 
-Build a cooking/recipe webapp ("Reciepie") where multiple editors can upload recipes and blog posts (tips & tricks) through a CMS admin panel. The public site should have a warm, cozy aesthetic (earthy tones, rustic cookbook feel). Deploying to Vercel.
+Build a cooking/recipe webapp ("Recipe") where multiple editors can upload recipes and blog posts (tips & tricks) through a CMS admin panel. The public site should have a warm, cozy aesthetic (earthy tones, rustic cookbook feel). Deploying to Vercel.
 
 ---
 
@@ -36,7 +36,7 @@ Build a cooking/recipe webapp ("Reciepie") where multiple editors can upload rec
 ## Project Structure
 
 ```
-reciepie/
+recipe/
 ├── payload.config.ts             # Payload master config
 ├── next.config.ts
 ├── tailwind.config.ts

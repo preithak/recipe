@@ -232,7 +232,7 @@ def login_to_payload() -> str:
     """Login and return auth token."""
     resp = requests.post(
         f"{BASE_URL}/api/users/login",
-        json={"email": "admin@reciepie.com", "password": "admin123"},
+        json={"email": "admin@recipe.com", "password": "admin123"},
     )
     data = resp.json()
     token = data.get("token")
@@ -306,7 +306,7 @@ def create_recipe(recipe_data: dict, token: str) -> bool:
 
 def scrape_and_seed():
     """Main function: scrape recipes and seed into Payload."""
-    print("\n=== Recipe Scraper for Reciepie ===\n")
+    print("\n=== Recipe Scraper for Recipe ===\n")
 
     # Login
     token = login_to_payload()
