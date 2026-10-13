@@ -56,7 +56,7 @@ export function Pagination({ currentPage, totalPages, basePath, searchParams = {
             href={buildUrl(page)}
             className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-medium transition-colors ${
               page === currentPage
-                ? 'bg-primary text-on-primary'
+                ? 'bg-gradient-to-br from-primary-dark to-primary-container text-on-primary'
                 : 'text-on-surface-variant hover:bg-surface-container'
             }`}
             aria-label={`Page ${page}`}

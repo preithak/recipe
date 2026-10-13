@@ -76,7 +76,7 @@ export default async function BlogPostPage({ params }: Props) {
 
       {/* Hero image */}
       {heroUrl && (
-        <div className="relative aspect-[16/9] rounded-2xl overflow-hidden mb-10">
+        <div className="relative aspect-[16/9] rounded-xl overflow-hidden mb-10">
           <Image
             src={heroUrl}
             alt={featuredImage?.alt || post.title}

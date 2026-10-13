@@ -41,7 +41,7 @@ export function RecipeFilters({
   const allCategories: FilterOption[] = [{ label: 'All', value: '' }, ...categories]
 
   return (
-    <div className="bg-surface-low/80 backdrop-blur-md px-6 py-4 rounded-2xl flex flex-wrap items-center justify-between gap-6 shadow-sm mb-10">
+    <div className="bg-surface-low/80 backdrop-blur-md px-6 py-4 rounded-xl flex flex-wrap items-center justify-between gap-6 shadow-sm mb-10">
       {/* Category pills — left side */}
       <div className="flex flex-wrap items-center gap-3">
         <span className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant/60">
@@ -51,9 +51,9 @@ export function RecipeFilters({
           <button
             key={opt.value}
             onClick={() => updateFilter('category', opt.value)}
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-all active:scale-95 ${
+            className={`px-5 py-2 badge-organic text-sm font-medium transition-all active:scale-95 ${
               activeCategory === opt.value
-                ? 'bg-primary text-on-primary'
+                ? 'bg-gradient-to-br from-primary-dark to-primary-container text-on-primary'
                 : 'bg-surface-container text-on-surface-variant hover:bg-surface-high'
             }`}
           >

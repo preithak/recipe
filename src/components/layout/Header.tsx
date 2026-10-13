@@ -10,7 +10,6 @@ export async function Header() {
     { label: 'Home', url: '/' },
     { label: 'Recipes', url: '/recipes' },
     { label: 'Blog', url: '/blog' },
-    { label: 'Categories', url: '/categories' },
   ]
 
   const navItems = header?.navItems?.length ? header.navItems : defaultNavItems

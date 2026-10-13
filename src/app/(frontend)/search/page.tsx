@@ -67,7 +67,7 @@ export default async function SearchPage({ searchParams }: Props) {
             />
             <button
               type="submit"
-              className="px-6 py-3 bg-primary text-on-primary rounded-full text-sm font-medium hover:bg-primary-dark transition-colors"
+              className="btn-primary"
             >
               Search
             </button>
@@ -96,6 +96,7 @@ export default async function SearchPage({ searchParams }: Props) {
                 featuredImage={recipe.featuredImage as RecipeCardImage}
                 metadata={recipe.metadata as RecipeMetadata}
                 category={recipe.category as { name: string } | null}
+                staffPick={recipe.staffPick as boolean}
               />
             ))}
           </div>
@@ -124,7 +125,7 @@ export default async function SearchPage({ searchParams }: Props) {
 
       {/* No results */}
       {query && totalResults === 0 && (
-        <div className="text-center py-20 bg-surface-low rounded-2xl">
+        <div className="text-center py-20 bg-surface-low rounded-xl">
           <p className="font-serif text-2xl text-on-surface mb-2">Nothing found</p>
           <p className="text-on-surface-variant">
             Try a different search term, or{' '}
@@ -135,7 +136,7 @@ export default async function SearchPage({ searchParams }: Props) {
 
       {/* Initial state */}
       {!query && (
-        <div className="text-center py-20 bg-surface-low rounded-2xl">
+        <div className="text-center py-20 bg-surface-low rounded-xl">
           <p className="font-serif text-2xl text-on-surface mb-2">What are you looking for?</p>
           <p className="text-on-surface-variant">
             Search by recipe name, ingredient, or topic.

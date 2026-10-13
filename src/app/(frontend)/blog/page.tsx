@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { getBlogPosts } from '@/lib/queries'
 import { BlogCard } from '@/components/blog/BlogCard'
+import { FeaturedBlogCard } from '@/components/blog/FeaturedBlogCard'
 import { Pagination } from '@/components/ui/Pagination'
+import { NewsletterSection } from '@/components/shared/NewsletterSection'
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -19,6 +21,7 @@ export default async function BlogPage({ searchParams }: Props) {
   const posts = result.docs
 
   return (
+    <>
     <div className="max-w-7xl mx-auto px-6 py-12">
       <div className="mb-12">
         <h1 className="font-serif text-4xl md:text-5xl text-on-surface mb-3">
@@ -31,19 +34,32 @@ export default async function BlogPage({ searchParams }: Props) {
 
       {posts.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {posts.map((post) => (
-              <BlogCard
-                key={post.id}
-                title={post.title}
-                slug={post.slug}
-                excerpt={post.excerpt}
-                featuredImage={post.featuredImage as BlogCardImage}
-                category={post.category as { name: string } | null}
-                publishedAt={post.publishedAt}
-              />
-            ))}
-          </div>
+          {/* Featured post - full width hero */}
+          <FeaturedBlogCard
+            title={posts[0].title}
+            slug={posts[0].slug}
+            excerpt={posts[0].excerpt}
+            featuredImage={posts[0].featuredImage as BlogCardImage}
+            category={posts[0].category as { name: string } | null}
+            publishedAt={posts[0].publishedAt}
+          />
+
+          {/* Remaining posts */}
+          {posts.length > 1 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+              {posts.slice(1).map((post) => (
+                <BlogCard
+                  key={post.id}
+                  title={post.title}
+                  slug={post.slug}
+                  excerpt={post.excerpt}
+                  featuredImage={post.featuredImage as BlogCardImage}
+                  category={post.category as { name: string } | null}
+                  publishedAt={post.publishedAt}
+                />
+              ))}
+            </div>
+          )}
           <Pagination
             currentPage={currentPage}
             totalPages={result.totalPages}
@@ -51,7 +67,7 @@ export default async function BlogPage({ searchParams }: Props) {
           />
         </>
       ) : (
-        <div className="text-center py-20 bg-surface-low rounded-2xl">
+        <div className="text-center py-20 bg-surface-low rounded-xl">
           <p className="font-serif text-2xl text-on-surface mb-2">No posts yet</p>
           <p className="text-on-surface-variant">
             Head to the{' '}
@@ -63,6 +79,8 @@ export default async function BlogPage({ searchParams }: Props) {
         </div>
       )}
     </div>
+    <NewsletterSection />
+    </>
   )
 }
 

@@ -2,6 +2,77 @@ import Link from 'next/link'
 import { getRecipes, getBlogPosts, getCategories } from '@/lib/queries'
 import { RecipeCard } from '@/components/recipes/RecipeCard'
 import { BlogCard } from '@/components/blog/BlogCard'
+import { NewsletterSection } from '@/components/shared/NewsletterSection'
+
+const svgProps = {
+  xmlns: 'http://www.w3.org/2000/svg',
+  width: 24,
+  height: 24,
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 2,
+  strokeLinecap: 'round' as const,
+  strokeLinejoin: 'round' as const,
+}
+
+const defaultIcon = (
+  <svg {...svgProps}>
+    <path d="M11 20A7 7 0 0 1 9.8 6.9C15.5 4.9 17 3.5 17 3.5s1.5 2.1-.5 6.5c2.5-.5 4-.5 4-.5s-1 2.5-4 4.5c0 0 1 1 3 1.5-2 1-5.5 1.5-8.5 4.5z" />
+    <path d="M11 20a7 7 0 0 1-4-2" />
+  </svg>
+)
+
+const categoryIcons: Record<string, React.ReactNode> = {
+  breakfast: (
+    <svg {...svgProps}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2" />
+      <path d="M12 20v2" />
+      <path d="m4.93 4.93 1.41 1.41" />
+      <path d="m17.66 17.66 1.41 1.41" />
+      <path d="M2 12h2" />
+      <path d="M20 12h2" />
+      <path d="m6.34 17.66-1.41 1.41" />
+      <path d="m19.07 4.93-1.41 1.41" />
+    </svg>
+  ),
+  lunch: (
+    <svg {...svgProps}>
+      <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+      <path d="M7 2v20" />
+      <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7" />
+    </svg>
+  ),
+  dinner: (
+    <svg {...svgProps}>
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" />
+    </svg>
+  ),
+  desserts: (
+    <svg {...svgProps}>
+      <path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8" />
+      <path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1" />
+      <path d="M2 21h20" />
+      <path d="M7 8v3" />
+      <path d="M12 8v3" />
+      <path d="M17 8v3" />
+      <path d="M7 4h.01" />
+      <path d="M12 4h.01" />
+      <path d="M17 4h.01" />
+    </svg>
+  ),
+  snacks: (
+    <svg {...svgProps}>
+      <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" />
+      <path d="M8.5 8.5v.01" />
+      <path d="M16 15.5v.01" />
+      <path d="M12 12v.01" />
+      <path d="M11 17v.01" />
+      <path d="M7 14v.01" />
+    </svg>
+  ),
+}
 
 export default async function HomePage() {
   const [recipesResult, postsResult, categoriesResult] = await Promise.all([
@@ -22,7 +93,7 @@ export default async function HomePage() {
           <p className="text-sm text-secondary tracking-widest uppercase mb-4">
             The Heirloom Editorial
           </p>
-          <h1 className="font-serif text-5xl md:text-7xl text-on-surface mb-6 leading-tight">
+          <h1 className="font-serif text-5xl md:text-[3.5rem] md:leading-[1.15] text-on-surface mb-6 leading-tight">
             Homemade recipes<br className="hidden md:block" /> with love
           </h1>
           <p className="text-lg text-on-surface-variant max-w-lg mx-auto mb-8">
@@ -31,7 +102,7 @@ export default async function HomePage() {
           </p>
           <Link
             href="/recipes"
-            className="inline-flex items-center gap-2 bg-primary text-on-primary px-8 py-3 rounded-full text-sm font-medium hover:bg-primary-dark transition-colors"
+            className="btn-primary inline-flex items-center gap-2"
           >
             Explore Recipes
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -47,9 +118,12 @@ export default async function HomePage() {
             {categories.slice(0, 5).map((cat) => (
               <Link
                 key={cat.id}
-                href={`/categories/${cat.slug}`}
-                className="group flex flex-col items-center gap-3 p-6 bg-surface-low rounded-2xl hover:bg-surface-container transition-colors text-center"
+                href={`/recipes?category=${cat.slug}`}
+                className="group flex flex-col items-center gap-3 p-6 bg-surface-low rounded-xl hover:bg-surface-container transition-colors text-center"
               >
+                <div className="w-12 h-12 rounded-full bg-tertiary-fixed/40 flex items-center justify-center text-primary-dark">
+                  {categoryIcons[cat.slug] || defaultIcon}
+                </div>
                 <span className="font-serif text-lg text-on-surface group-hover:text-primary transition-colors">
                   {cat.name}
                 </span>
@@ -83,11 +157,12 @@ export default async function HomePage() {
                   featuredImage={recipe.featuredImage as RecipeCardImage}
                   metadata={recipe.metadata}
                   category={recipe.category as { name: string } | null}
+                  staffPick={(recipe as Record<string, unknown>).staffPick as boolean}
                 />
               ))}
             </div>
           ) : (
-            <div className="text-center py-16 bg-surface rounded-2xl">
+            <div className="text-center py-16 bg-surface rounded-xl">
               <p className="font-serif text-xl text-on-surface mb-2">No recipes yet</p>
               <p className="text-on-surface-variant text-sm">
                 Create your first recipe in the{' '}
@@ -125,7 +200,7 @@ export default async function HomePage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 bg-surface-low rounded-2xl">
+          <div className="text-center py-16 bg-surface-low rounded-xl">
             <p className="font-serif text-xl text-on-surface mb-2">Stories coming soon</p>
             <p className="text-on-surface-variant text-sm">
               Kitchen tales and seasonal tips are on the way.
@@ -134,28 +209,8 @@ export default async function HomePage() {
         )}
       </section>
 
-      {/* Newsletter / Join Our Table */}
-      <section className="bg-surface-container py-16">
-        <div className="max-w-xl mx-auto px-6 text-center">
-          <h2 className="font-serif text-3xl text-on-surface mb-3">Join Our Table</h2>
-          <p className="text-on-surface-variant mb-6">
-            Get seasonal recipes and kitchen stories delivered to your inbox.
-          </p>
-          <form className="flex gap-3 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Your email"
-              className="flex-1 px-4 py-3 bg-surface-high rounded-lg text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
-            />
-            <button
-              type="submit"
-              className="px-6 py-3 bg-primary text-on-primary rounded-full text-sm font-medium hover:bg-primary-dark transition-colors whitespace-nowrap"
-            >
-              Subscribe
-            </button>
-          </form>
-        </div>
-      </section>
+      {/* Newsletter */}
+      <NewsletterSection />
     </>
   )
 }

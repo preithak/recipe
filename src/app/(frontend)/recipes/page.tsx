@@ -87,8 +87,8 @@ export default async function RecipesPage({ searchParams }: Props) {
       {/* Recipe grid */}
       {recipes.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {recipes.map((recipe) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 [&>*:first-child]:sm:col-span-2">
+            {recipes.map((recipe, index) => (
               <RecipeCard
                 key={recipe.id}
                 title={recipe.title}
@@ -97,6 +97,8 @@ export default async function RecipesPage({ searchParams }: Props) {
                 featuredImage={recipe.featuredImage as RecipeCardImage}
                 metadata={recipe.metadata}
                 category={recipe.category as { name: string } | null}
+                featured={index === 0}
+                staffPick={(recipe as Record<string, unknown>).staffPick as boolean}
               />
             ))}
           </div>
@@ -110,7 +112,7 @@ export default async function RecipesPage({ searchParams }: Props) {
           />
         </>
       ) : (
-        <div className="text-center py-20 bg-surface-low rounded-2xl">
+        <div className="text-center py-20 bg-surface-low rounded-xl">
           <p className="font-serif text-2xl text-on-surface mb-2">No recipes found</p>
           <p className="text-on-surface-variant">
             Try adjusting your filters, or{' '}

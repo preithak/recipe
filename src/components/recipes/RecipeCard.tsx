@@ -19,6 +19,8 @@ type RecipeCardProps = {
     servings?: number | null
   }
   category?: { name: string } | null
+  featured?: boolean
+  staffPick?: boolean
 }
 
 function formatTime(minutes: number): string {
@@ -35,15 +37,17 @@ export function RecipeCard({
   featuredImage,
   metadata,
   category,
+  featured,
+  staffPick,
 }: RecipeCardProps) {
   const imageUrl = featuredImage?.sizes?.card?.url || featuredImage?.url
   const totalTime = (metadata?.prepTime || 0) + (metadata?.cookTime || 0)
 
   return (
     <Link href={`/recipes/${slug}`} className="group block">
-      <article className="bg-surface-low rounded-2xl overflow-hidden shadow-[0_4px_40px_rgba(45,21,9,0.06)] hover:shadow-[0_8px_40px_rgba(45,21,9,0.12)] transition-shadow">
+      <article className="bg-surface-low rounded-xl overflow-hidden shadow-[0_4px_40px_rgba(45,21,9,0.06)] hover:shadow-[0_8px_40px_rgba(45,21,9,0.12)] transition-shadow">
         {/* Image */}
-        <div className="relative aspect-[4/5] overflow-hidden">
+        <div className={`relative ${featured ? 'aspect-[16/9]' : 'aspect-[4/5]'} overflow-hidden`}>
           {imageUrl ? (
             <Image
               src={imageUrl}
@@ -59,8 +63,14 @@ export function RecipeCard({
           )}
           {/* Difficulty badge */}
           {metadata?.difficulty && (
-            <span className="absolute top-4 left-4 bg-tertiary-fixed text-on-surface text-xs font-medium px-3 py-1 rounded-full">
+            <span className="absolute top-4 left-4 bg-tertiary-fixed text-on-surface text-xs font-medium px-3 py-1 badge-organic">
               {metadata.difficulty.charAt(0).toUpperCase() + metadata.difficulty.slice(1)}
+            </span>
+          )}
+          {/* Staff Pick badge */}
+          {staffPick && (
+            <span className="absolute top-4 right-4 bg-tertiary text-on-primary text-xs font-medium px-3 py-1 badge-organic-alt">
+              Staff Pick
             </span>
           )}
         </div>
@@ -74,7 +84,7 @@ export function RecipeCard({
             </span>
           )}
 
-          <h3 className="font-serif text-xl text-on-surface mt-1 mb-2 group-hover:text-primary transition-colors leading-snug">
+          <h3 className={`font-serif ${featured ? 'text-2xl' : 'text-xl'} text-on-surface mt-1 mb-2 group-hover:text-primary transition-colors leading-snug`}>
             {title}
           </h3>
 

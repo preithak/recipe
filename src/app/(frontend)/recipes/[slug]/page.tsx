@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation'
 import { getPayload } from '@/lib/payload'
 import { getRecipeBySlug } from '@/lib/queries'
 import { RichText } from '@/components/shared/RichText'
+import { PrintButton } from '@/components/recipes/PrintButton'
+import { RecipeCard } from '@/components/recipes/RecipeCard'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -43,6 +45,31 @@ export default async function RecipePage({ params }: Props) {
 
   if (!recipe) notFound()
 
+  // Fetch related recipes from same category
+  let relatedRecipes: Array<{
+    id: string; title: string; slug: string; description: string;
+    featuredImage: unknown; metadata: unknown; category: unknown;
+  }> = []
+
+  if (recipe.category) {
+    const categoryId = typeof recipe.category === 'object'
+      ? (recipe.category as { id: string }).id
+      : recipe.category
+    const payload = await getPayload()
+    const related = await payload.find({
+      collection: 'recipes',
+      where: {
+        and: [
+          { category: { equals: categoryId } },
+          { id: { not_equals: recipe.id } },
+        ],
+      },
+      limit: 3,
+      sort: '-publishedAt',
+    })
+    relatedRecipes = related.docs as typeof relatedRecipes
+  }
+
   const featuredImage = recipe.featuredImage as {
     url?: string
     alt?: string
@@ -52,10 +79,10 @@ export default async function RecipePage({ params }: Props) {
   const totalTime = (recipe.metadata?.prepTime || 0) + (recipe.metadata?.cookTime || 0)
 
   return (
-    <article className="max-w-4xl mx-auto px-6 py-12">
+    <article className="max-w-5xl mx-auto px-6 py-12">
       {/* Hero image */}
       {heroUrl && (
-        <div className="relative aspect-[16/9] rounded-2xl overflow-hidden mb-8">
+        <div className="relative aspect-[16/9] rounded-xl overflow-hidden mb-8">
           <Image
             src={heroUrl}
             alt={featuredImage?.alt || recipe.title}
@@ -69,9 +96,12 @@ export default async function RecipePage({ params }: Props) {
 
       {/* Title & metadata */}
       <header className="mb-10">
-        <h1 className="font-serif text-4xl md:text-5xl text-on-surface mb-4 leading-tight">
-          {recipe.title}
-        </h1>
+        <div className="flex items-start justify-between gap-4">
+          <h1 className="font-serif text-4xl md:text-5xl text-on-surface mb-4 leading-tight">
+            {recipe.title}
+          </h1>
+          <PrintButton />
+        </div>
         <p className="text-lg text-on-surface-variant mb-6">{recipe.description}</p>
 
         {/* Metadata bar */}
@@ -118,7 +148,7 @@ export default async function RecipePage({ params }: Props) {
       {/* Two-column layout: ingredients + instructions */}
       <div className="grid md:grid-cols-[1fr_2fr] gap-10">
         {/* Ingredients */}
-        <aside>
+        <aside className="bg-surface-low p-6 rounded-xl md:sticky md:top-24 self-start">
           <h2 className="font-serif text-2xl text-on-surface mb-4">Ingredients</h2>
           {recipe.ingredientGroups?.map((group: IngredientGroup, gi: number) => (
             <div key={gi} className="mb-6">
@@ -127,21 +157,18 @@ export default async function RecipePage({ params }: Props) {
                   {group.groupName}
                 </h3>
               )}
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {group.ingredients?.map((ing: Ingredient, ii: number) => (
                   <li
                     key={ii}
-                    className="flex items-baseline gap-2 text-on-surface-variant py-1.5 border-b border-outline-variant/10"
+                    className="text-on-surface"
                   >
-                    {ing.quantity && (
-                      <span className="font-medium text-on-surface whitespace-nowrap">
-                        {ing.quantity} {ing.unit}
-                      </span>
-                    )}
-                    <span>{ing.item}</span>
-                    {ing.notes && (
-                      <span className="text-xs italic text-on-surface-variant">({ing.notes})</span>
-                    )}
+                    {[
+                      ing.quantity,
+                      ing.unit,
+                      ing.item,
+                      ing.notes ? `(${ing.notes})` : '',
+                    ].filter(Boolean).join(' ')}
                   </li>
                 ))}
               </ul>
@@ -202,7 +229,7 @@ export default async function RecipePage({ params }: Props) {
 
               return (
                 <li key={si} className="flex gap-5">
-                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center text-sm font-medium">
+                  <span className="flex-shrink-0 font-serif text-2xl text-on-surface-variant/40 leading-none pt-1">
                     {String(si + 1).padStart(2, '0')}
                   </span>
                   <div className="flex-1">
@@ -238,6 +265,26 @@ export default async function RecipePage({ params }: Props) {
           <h2 className="font-serif text-2xl text-on-surface mb-4">The Story</h2>
           <div className="prose-warm">
             <RichText content={recipe.body} />
+          </div>
+        </section>
+      )}
+
+      {/* Related Recipes */}
+      {relatedRecipes.length > 0 && (
+        <section className="mt-16 pt-10 border-t border-outline-variant/15">
+          <h2 className="font-serif text-2xl text-on-surface mb-6">You might also enjoy</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {relatedRecipes.map((r) => (
+              <RecipeCard
+                key={r.id}
+                title={r.title}
+                slug={r.slug}
+                description={r.description}
+                featuredImage={r.featuredImage as { url?: string; alt?: string; sizes?: { card?: { url?: string } } }}
+                metadata={r.metadata as { prepTime?: number | null; cookTime?: number | null; difficulty?: string | null; servings?: number | null }}
+                category={r.category as { name: string } | null}
+              />
+            ))}
           </div>
         </section>
       )}

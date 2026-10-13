@@ -28,7 +28,7 @@ export function BlogCard({
 
   return (
     <Link href={`/blog/${slug}`} className="group block">
-      <article className="bg-surface-low rounded-2xl overflow-hidden shadow-[0_4px_40px_rgba(45,21,9,0.06)] hover:shadow-[0_8px_40px_rgba(45,21,9,0.12)] transition-shadow">
+      <article className="bg-surface-low rounded-xl overflow-hidden shadow-[0_4px_40px_rgba(45,21,9,0.06)] hover:shadow-[0_8px_40px_rgba(45,21,9,0.12)] transition-shadow">
         {/* Image */}
         <div className="relative aspect-[3/2] overflow-hidden">
           {imageUrl ? (

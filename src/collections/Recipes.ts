@@ -200,6 +200,15 @@ export const Recipes: CollectionConfig = {
         position: 'sidebar',
       },
     },
+    {
+      name: 'staffPick',
+      type: 'checkbox',
+      label: 'Staff Pick',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+      },
+    },
     // --- Body (rich text for story/notes) ---
     {
       name: 'body',
